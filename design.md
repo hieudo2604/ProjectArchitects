@@ -7,9 +7,7 @@ Design a feature for your own project using visual diagrams. This assignment hel
 ## Choose Your User Story
 
 Select one user story from your project that involves:
-- At least 2 user interactions
-- Backend logic or data storage
-- At least one external service (optional but encouraged)
+As a project manager, I want to create a task and assign it to a team member so that work can be tracked and completed on time.
 
 ## Deliverables
 
@@ -22,10 +20,38 @@ Using any drawing tool, create the following diagrams.
 **What it's for:** Shows the big picture—who uses your system and what external systems it connects to. Helps you identify boundaries and dependencies before diving into details.
 
 Include:
-- Your system as a single box
-- All actors (users, admins, other systems)
-- External services (payments, auth, APIs)
-- Labeled arrows showing interactions
+```
+                 ┌────────────────────┐
+                 │   Project Manager  │
+                 └─────────┬──────────┘
+                           │
+              Create / Assign Task
+                           │
+                           ▼
+┌─────────────────────────────────────────┐
+│        Project Management System        │
+│                                         │
+│  - Task Creation Logic                  │
+│  - Task Assignment Logic                │
+│  - Validation & Business Rules          │
+└───────────┬───────────────┬─────────────┘
+            │               │
+            │               │
+   Store / Retrieve      Send Notification
+            │               │
+            ▼               ▼
+┌────────────────┐   ┌──────────────────┐
+│   Database     │   │ Notification     │
+│ (Tasks, Users, │   │ Service (Email / │
+│  Assignments)  │   │ Push Alerts)     │
+└────────────────┘   └──────────────────┘
+                           ▲
+                           │
+                 ┌─────────┴──────────┐
+                 │   Team Member      │
+                 └────────────────────┘
+
+```
 
 ---
 
