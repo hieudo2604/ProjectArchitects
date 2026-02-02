@@ -33,6 +33,12 @@ As a team member, I want to create and update tasks so that I can track my work 
 
 **Notes:** [Tasks stored in database; real-time updates optional for MVP.]
 
+### [Create, Sign in and Log off an Account]
+As a new user, I want to create and sign into a new account so that I can start my work.
+**Acceptance Criteria:**
+- [ ] [Prospective users can create a new account by entering an unused email address, username, and password]
+- [ ] [Passwords are automatically encrypted]
+- [ ] [A "Forgot Password" feature is available]
 ---
 
 #### [Project Dashboard]
