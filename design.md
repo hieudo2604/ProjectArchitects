@@ -6,7 +6,7 @@ Design a feature for your own project using visual diagrams. This assignment hel
 
 ## Choose Your User Story
 
-Select one user story from your project that involves:
+Select one user story from your project that involves:<br>
 As a project manager, I want to create a task and assign it to a team member so that work can be tracked and completed on time.
 
 ## Deliverables
