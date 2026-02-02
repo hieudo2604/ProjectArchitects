@@ -1,0 +1,92 @@
+# Software Design Assignment
+
+## Overview
+
+Design a feature for your own project using visual diagrams. This assignment helps you think through your system before writing code.
+
+## Choose Your User Story
+
+Select one user story from your project that involves:
+- At least 2 user interactions
+- Backend logic or data storage
+- At least one external service (optional but encouraged)
+
+## Deliverables
+
+Using any drawing tool, create the following diagrams.
+
+---
+
+### 1. Context Diagram (10 points)
+
+**What it's for:** Shows the big picture—who uses your system and what external systems it connects to. Helps you identify boundaries and dependencies before diving into details.
+
+Include:
+- Your system as a single box
+- All actors (users, admins, other systems)
+- External services (payments, auth, APIs)
+- Labeled arrows showing interactions
+
+---
+
+### 2. User Flow Diagram (15 points)
+
+**What it's for:** Maps the user's journey through your feature step-by-step. Reveals missing screens, confusing paths, and edge cases you might forget when coding.
+
+Include:
+- Entry point
+- Each screen or state
+- Decision points (diamonds)
+- Success and error/cancel paths
+
+---
+
+### 3. Sequence Diagram (20 points)
+
+**What it's for:** Shows how components talk to each other over time for one specific flow. Exposes timing issues, missing error handling, and unclear responsibilities between services.
+
+Include:
+- All components involved (frontend, API, database, services)
+- Arrows labeled with verb + payload (e.g., `POST /users`)
+- One failure scenario with retry or fallback
+
+---
+
+### 4. State Machine (optional)
+
+**What it's for:** Shows all possible states an entity can be in and how it transitions between them. Prevents bugs from invalid state transitions and clarifies business logic.
+
+Include:
+- All valid states for a key entity
+- Transitions with trigger labels
+- Terminal states (success, cancelled, failed)
+
+---
+
+### 5. Design Context Block (5 points)
+
+**What it's for:** Forces you to articulate *why* you're building this before *how*. Keeps the team aligned on goals and constraints.
+
+Add a text block with:
+- Problem statement (1 sentence)
+- Target user
+- Success metric
+- Key constraint
+
+---
+
+### 6. Open Questions (5 points)
+
+**What it's for:** Acknowledges what you don't know yet. Prevents assumptions from becoming bugs later.
+
+Add 3 sticky notes identifying unresolved questions with owner and due date.
+
+---
+
+## Notation
+
+Use consistent conventions:
+- Solid arrows = synchronous calls
+- Dashed arrows = async events
+- Cylinders = databases
+- Rounded rectangles = external systems
