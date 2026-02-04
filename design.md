@@ -60,33 +60,57 @@ Include:
 **What it's for:** Maps the user's journey through your feature step-by-step. Reveals missing screens, confusing paths, and edge cases you might forget when coding.
 
 ```
-[Login Screen] ──check valid──▶ [Is this valid?]
-                                    │
-                    ┌───────────────┴───────────────┐
-                    ▼                               ▼
-                  [Yes]                            [No]
-                    │                               │
-                    ▼                               ▼
-                [Success]                      [Login error]
-              + Dashboard                      + Retry Login
-                    |
-                    ▼
-           [Create New Project]
-            + Project Screen <--------------------------|
-                    |                                   |
-                    ▼                                   |
-          [Create Task/ Assign Member]                  |
-                    |                                   |
-                    ▼                                   |
-                [Database]                              |
-                                                [Dashboard] [Login error]
-                                                        |    |
-                                                      [Yes] [No]
-                                                        ^    ^
-                                                        |    |
-                                                        |    |      
-                                                    [Is this valid]<-check valid- [Login Screen]<-- [Team members]
-              
+[Entry Point]
+   |
+   v
+[Login Screen]
+   |
+   v
+◇ Is login valid? ◇
+   | Yes                           | No
+   v                               v
+[Dashboard]                   [Login Error]
+   |                               |
+   |                               └──> [Retry Login]
+   |
+   v
+[Create New Project Screen]
+   |
+   v
+◇ Create project? ◇
+   | Yes                           | Cancel
+   v                               v
+[Project Screen]               [Dashboard]
+   |
+   v
+[Create Task / Assign Member Screen]
+   |
+   v
+[Enter Task Details + Select Team Member]
+   |
+   v
+◇ Are inputs valid? ◇
+   | Yes                           | No
+   v                               v
+[Project Management System]   [Validation Error]
+   |                               |
+   |                               └──> [Edit Task / Assignment]
+   |
+   v
+[Save Task & Assignment]
+   |
+   v
+[Database]
+   |
+   v
+◇ Save successful? ◇
+   | Yes                           | No
+   v                               v
+[Task Created Successfully]   [System Error]
+   |                               |
+   v                               └──> [Retry / Cancel]
+[Dashboard – Updated Task List]
+
 ```
 
 ---
