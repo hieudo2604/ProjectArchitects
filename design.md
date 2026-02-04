@@ -130,11 +130,9 @@ Include:
 
 **What it's for:** Shows all possible states an entity can be in and how it transitions between them. Prevents bugs from invalid state transitions and clarifies business logic.
 
-Include:
-- All valid states for a key entity
-- Transitions with trigger labels
-- Terminal states (success, cancelled, failed)
+```
 
+```
 ---
 
 ### 5. Design Context Block (5 points)
@@ -155,7 +153,11 @@ Add a text block with:
 
 Add 3 sticky notes identifying unresolved questions with owner and due date.
 
+Which API endpoint should be used for user authentication (/auth or /login)?
+Are the advanced reporting features part of Phase 2, or are they deferred to a later release?
+
 ---
+
 
 ## Notation
 
