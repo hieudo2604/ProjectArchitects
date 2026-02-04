@@ -59,11 +59,35 @@ Include:
 
 **What it's for:** Maps the user's journey through your feature step-by-step. Reveals missing screens, confusing paths, and edge cases you might forget when coding.
 
-Include:
-- Entry point
-- Each screen or state
-- Decision points (diamonds)
-- Success and error/cancel paths
+```
+[Login Screen] ──check valid──▶ [Is this valid?]
+                                    │
+                    ┌───────────────┴───────────────┐
+                    ▼                               ▼
+                  [Yes]                            [No]
+                    │                               │
+                    ▼                               ▼
+                [Success]                      [Login error]
+              + Dashboard                      + Retry Login
+                    |
+                    ▼
+           [Create New Project]
+            + Project Screen <--------------------------|
+                    |                                   |
+                    ▼                                   |
+          [Create Task/ Assign Member]                  |
+                    |                                   |
+                    ▼                                   |
+                [Database]                              |
+                                                [Dashboard] [Login error]
+                                                        |    |
+                                                      [Yes] [No]
+                                                        ^    ^
+                                                        |    |
+                                                        |    |      
+                                                    [Is this valid]<-check valid- [Login Screen]<-- [Team members]
+              
+```
 
 ---
 
