@@ -117,13 +117,27 @@ Include:
 
 ### 3. Sequence Diagram (20 points)
 
-**What it's for:** Shows how components talk to each other over time for one specific flow. Exposes timing issues, missing error handling, and unclear responsibilities between services.
+```
+Web App ──▶ API: POST /projects/{projectId}/tasks
+             {title, description, assigneeId, dueDate}
 
-Include:
-- All components involved (frontend, API, database, services)
-- Arrows labeled with verb + payload (e.g., `POST /users`)
-- One failure scenario with retry or fallback
+API ──▶ DB: Validate project + user permissions
+API ◀── DB: OK ✓
 
+API ──▶ DB: INSERT task {title, description, projectId}
+API ◀── DB: taskId
+
+API ──▶ Queue: TaskAssigned{taskId, assigneeId, idempotencyKey}
+
+Web App ◀── API: 201 Created {taskId}
+
+Queue ──▶ Notification Worker: process
+Notification Worker ──▶ Email Service: POST /send
+Notification Worker ──X Email Service: timeout
+Notification Worker ──▶ retry (3x)
+Notification Worker ──▶ DLQ: log for manual follow-up
+
+```
 ---
 
 ### 4. State Machine (optional)
@@ -131,6 +145,24 @@ Include:
 **What it's for:** Shows all possible states an entity can be in and how it transitions between them. Prevents bugs from invalid state transitions and clarifies business logic.
 
 ```
+Web App ──▶ API: POST /projects/{projectId}/tasks
+             {title, description, assigneeId, dueDate}
+
+API ──▶ DB: Validate project + user permissions
+API ◀── DB: OK ✓
+
+API ──▶ DB: INSERT task {title, description, projectId}
+API ◀── DB: taskId
+
+API ──▶ Queue: TaskAssigned{taskId, assigneeId, idempotencyKey}
+
+Web App ◀── API: 201 Created {taskId}
+
+Queue ──▶ Notification Worker: process
+Notification Worker ──▶ Email Service: POST /send
+Notification Worker ──X Email Service: timeout
+Notification Worker ──▶ retry (3x)
+Notification Worker ──▶ DLQ: log for manual follow-up
 
 ```
 ---
