@@ -173,8 +173,8 @@ Add a text block with:
 
 Add 3 sticky notes identifying unresolved questions with owner and due date.
 
-Which API endpoint should be used for user authentication (/auth or /login)?
-Are the advanced reporting features part of Phase 2, or are they deferred to a later release?
+-Which API endpoint should be used for user authentication (/auth or /login)?
+-Are the advanced reporting features part of Phase 2, or are they deferred to a later release?
 
 ---
 
