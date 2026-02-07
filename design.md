@@ -159,11 +159,12 @@ Notification Worker ──▶ DLQ: log for manual follow-up
 
 **What it's for:** Forces you to articulate *why* you're building this before *how*. Keeps the team aligned on goals and constraints.
 
-Add a text block with:
-- Problem statement (1 sentence)
-- Target user
-- Success metric
-- Key constraint
+```
+PROBLEM: Project managers lack a centralized way to create and assign tasks, causing missed deadlines and unclear ownership.
+USER: Project managers managing active projects and team members.
+SUCCESS METRIC: 85% of tasks are created and assigned within the system without follow-up clarification messages.
+CONSTRAINT: Tasks cannot be assigned to users who are not members of the project.
+```
 
 ---
 
