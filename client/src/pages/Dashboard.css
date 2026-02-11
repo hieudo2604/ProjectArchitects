@@ -1,0 +1,25 @@
+/* Main content default (light mode) */
+.content.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Dark mode */
+.content.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.content {
+  padding: 2rem;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.content.collapsed {
+  margin-left: 60px;
+}
+
+.content.expanded {
+  margin-left: 225px;
+}

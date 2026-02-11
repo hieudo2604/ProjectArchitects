@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import './Header.css';
 
 function Header({ user, onLogout }) {
+  const [showLogIn, setShowLogIn] = useState(false);
+
   return (
     <header className="header">
       <div className="header-content">
@@ -14,7 +17,7 @@ function Header({ user, onLogout }) {
               </button>
             </div>
           ) : (
-            <span className="user-email">Not logged in</span>
+            <button className="w3-large w3-orange w3-hover-grey w3-round-large" onClick={() => setShowLogIn(true)}>Log In</button>
           )}
         </nav>
       </div>
