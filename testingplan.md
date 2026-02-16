@@ -10,11 +10,11 @@ Write a concise **testing plan** (maximum 1–1.5 pages when formatted) that def
 Use these exact headings in your document:
 
 ### 1. Types of Testing
--Functional testing
-Selenium: designed to automate web browsers to verify that web application functionalities.
-Unit testing: Tests individual methods or components.
--Non-Functional testing
-Performance Testing: Measures responsiveness and stability under load.
+-Functional testing<br>
+Selenium: designed to automate web browsers to verify that web application functionalities.<br>
+Unit testing: Tests individual methods or components.<br>
+-Non-Functional testing<br>
+Performance Testing: Measures responsiveness and stability under load.<br>
 Security Testing: Identifies vulnerabilities.
 
 ### 2. Risk-Based Priorities
