@@ -9,26 +9,26 @@ Write a concise **testing plan** (maximum 1–1.5 pages when formatted) that def
 
 Use these exact headings in your document:
 
-### 1. Types of Testing
-## Functional Testing
+## 1. Types of Testing
+### Functional Testing
 - **Selenium**: Designed to automate web browsers to verify web application functionality.
 - **Unit Testing**: Tests individual methods or components.
 
 
-## Non-Functional Testing
+### Non-Functional Testing
 - **Performance Testing**: Measures responsiveness and stability under load.
 - **Security Testing**: Identifies vulnerabilities.
 
-### 2. Risk-Based Priorities
+## 2. Risk-Based Priorities
 Identify the **top 3–5 areas / features / user flows** that deserve the most thorough testing.  
 For each, provide a brief reason why it is high-risk or business-critical.
 
-### 3. Testing Scope
+## 3. Testing Scope
 - What will be **fully / exhaustively tested**?  
 - What will be **sampled / spot-checked**?  
 - What will be **postponed** or de-scoped?
 
-### 4. Entry & Exit Criteria
+## 4. Entry & Exit Criteria
 **Entry criteria** — 2–4 bullet points defining when testing can begin  
 (e.g. build stability, environment readiness, no known blockers).
 
@@ -36,7 +36,7 @@ For each, provide a brief reason why it is high-risk or business-critical.
 that mean “the app meets our quality bar and is ready to release”  
 (e.g. zero critical bugs, 95%+ test pass rate on priority flows).
 
-### 5. Tools, Environments & Devices (brief)
+## 5. Tools, Environments & Devices (brief)
 List the main tools, browsers/devices/OS versions, staging environments, test accounts, etc.  
 One short bullet per item.
 
