@@ -10,9 +10,12 @@ Write a concise **testing plan** (maximum 1–1.5 pages when formatted) that def
 Use these exact headings in your document:
 
 ### 1. Types of Testing
-List the essential testing types planned.  
-Examples: critical unit testing, regression, smoke, usability, performance, security, compatibility, etc.  
-Keep each item to 1 short sentence.
+-Functional testing
+Selenium: designed to automate web browsers to verify that web application functionalities.
+Unit testing: Tests individual methods or components.
+-Non-Functional testing
+Performance Testing: Measures responsiveness and stability under load.
+Security Testing: Identifies vulnerabilities.
 
 ### 2. Risk-Based Priorities
 Identify the **top 3–5 areas / features / user flows** that deserve the most thorough testing.  
