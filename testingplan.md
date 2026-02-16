@@ -14,6 +14,7 @@ Use these exact headings in your document:
 - **Selenium**: Designed to automate web browsers to verify web application functionality.
 - **Unit Testing**: Tests individual methods or components.
 
+
 ## Non-Functional Testing
 - **Performance Testing**: Measures responsiveness and stability under load.
 - **Security Testing**: Identifies vulnerabilities.
