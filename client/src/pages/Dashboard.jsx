@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import useLocalStorage from "use-local-storage";
-import Sidebar from "./components/Sidebar";
+import Darkmode from "../components/Darkmode";
+import Sidebar from "../components/Sidebar";
 import "./Dashboard.css";
-import About from "./elements/About";
-import Project from "./elements/Project";
+import About from "../elements/About"
+import Project from "../elements/Project";
 
-function App() {
-  const [isDark, setIsDark] = useLocalStorage("isDark", false);
+function Dashboard() {
+  const [isDark, setIsDark] = Darkmode("isDark", false);
   const [activePage, setActivePage] = useState("home");
   const [isOpen, setIsOpen] = useState(true);
 
@@ -22,4 +22,4 @@ function App() {
   );
 }
 
-export default App;
+export default Dashboard;

@@ -13,12 +13,12 @@ function About(){
                 notifications, it empowers both managers and team members 
                 to work efficiently and make informed decisions.
             </p>
-            <p>Team Members</p>
-            <ol>
+
+            <h1>Team Members</h1>
+            <ul style={{ paddingLeft: '40px' }}>
                 <li>Ronoquade Lawrence</li>
                 <li>Hieu Do</li>
-            </ol>
-
+            </ul>
         </div>
     );
 }

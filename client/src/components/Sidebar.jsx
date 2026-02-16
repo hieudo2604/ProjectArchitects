@@ -19,9 +19,9 @@ function Sidebar({ handleChange, isChecked, setActivePage, isOpen, setIsOpen }) 
               <span className="sidebar-text">Home</span>
             </li>
 
-            <li className= "w3-hover-grey" onClick={() => setActivePage("dashboard")}>
-              <i className="material-icons">dashboard</i>
-              <span className="sidebar-text">Dashboard</span>
+            <li className= "w3-hover-grey" onClick={() => setActivePage("project")}>
+              <i className="material-icons">folder</i>
+              <span className="sidebar-text">Project</span>
             </li>
 
             <li className= "w3-hover-grey" onClick={() => setActivePage("about")}>
