@@ -11,7 +11,7 @@ Use these exact headings in your document:
 
 ## 1. Types of Testing
 ### Functional Testing
-- **Selenium**: Designed to automate web browsers to verify web application functionality.
+- **Cypress**: Designed to automate web browsers to verify web application functionality.
 - **Unit Testing**: Tests individual methods or components.
 
 ### Non-Functional Testing
@@ -45,7 +45,7 @@ Testing can begin once the following conditions are met:
 - **Sign-Off by Stakeholders** – product owner or QA lead approves release based on test results and risk assessment.
 
 ## 5. Tools, Environments & Devices (brief)
-- **Automation / Functional Testing**: Selenium WebDriver
+- **Automation / Functional Testing**: Cypress
 - **Unit Testing**: Jest / React Testing Library (for frontend), JUnit (for backend)
 - **Performance Testing**: JMeter or Locust
 - **Security Testing**: OWASP ZAP or Burp Suite
@@ -61,6 +61,6 @@ Testing can begin once the following conditions are met:
 
 ## Goal
 After reading your plan (should take ~3 minutes), any stakeholder should immediately understand:  
-- What quality level the team is targeting  
-- Where the majority of testing effort is going  
+- What quality level is the team targeting  
+- Where the majority of the testing effort is going  
 - The concrete conditions under which the app will be approved for release
