@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import Darkmode from "../components/Darkmode";
+import useDarkmode from "../components/Darkmode";
 import Sidebar from "../components/Sidebar";
 import "./Dashboard.css";
 import About from "../elements/About"
 import Project from "../elements/Project";
+import Logout from "../elements/Logout";
 
 function Dashboard() {
-  const [isDark, setIsDark] = Darkmode("isDark", false);
+  const [isDark, setIsDark] = useDarkmode("isDark", false);
   const [activePage, setActivePage] = useState("home");
   const [isOpen, setIsOpen] = useState(true);
 
@@ -14,9 +15,9 @@ function Dashboard() {
     <div className="App" data-theme={isDark ? "dark" : "light"}>
       <Sidebar isDark={isDark} handleChange={() => setIsDark(!isDark)} setActivePage={setActivePage} isOpen={isOpen} setIsOpen={setIsOpen}/>
       <main className={`content ${isDark ? "dark" : "light"}  ${isOpen ? "expanded" : "collapsed"}`}>
-        {/*{activePage ==="home" && <Home />} */}
         {activePage ==="about" && <About />}
         {activePage ==="project" && <Project />}
+        {activePage ==="logout" && <Logout />}
       </main>
     </div>
   );

@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import './Header.css';
 import { useAuth } from '../contexts/AuthContext';
 import LoginModal from './LoginModal';
+import SignupModal from './SignupModal';
 
 function Header({}) {
-  const { user, logout, signIn } = useAuth();
+  const { user, logout, signIn, signUp } = useAuth();
   const [showLogIn, setShowLogIn] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (email, password) => {
@@ -17,6 +19,17 @@ function Header({}) {
     } catch (err) {
       console.error(err);
       alert("Login failed");
+    }
+  };
+
+  const handleSignup = async (email, password) => {
+    try {
+      await signUp(email, password); // Firebase signup
+      setShowSignUp(false);                    // close modal
+      navigate("/dashboard");                  // redirect to Dashboard
+    } catch (err) {
+      console.error(err);
+      alert("Signup failed");
     }
   };
 
@@ -38,6 +51,12 @@ function Header({}) {
             {showLogIn && (
             <LoginModal onClose={()=> setShowLogIn(false)} 
               onLogin={handleLogin}
+            />
+          )}
+          <button className="w3-large w3-orange w3-hover-grey w3-round-large" onClick={() => setShowSignUp(true)}>Sign Up</button>
+          {showSignUp && (
+            <SignupModal onClose={()=> setShowSignUp(false)} 
+              onSignup={handleSignup}
             />
           )}
           </>

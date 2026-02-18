@@ -1,14 +1,20 @@
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
-function Logout(){
-    const handleLogout = () => {
-        
-    }
-    return(
-        <div>
+function Logout() {
+  const { logout } = useAuth();
 
-        </div>
-    );
+  useEffect(() => {
+    const handleLogout = async () => {
+      await logout();
+      window.location.href = "/"; 
+    };
+
+    handleLogout();
+  }, []);
+
+  return <h2>Logging out...</h2>;
 }
 
 export default Logout;
+
