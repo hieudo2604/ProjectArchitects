@@ -46,7 +46,7 @@ Testing can begin once the following conditions are met:
 
 ## 5. Tools, Environments & Devices (brief)
 - **Automation / Functional Testing**: Cypress
-- **Unit Testing**: Jest / React Testing Library (for frontend), JUnit (for backend)
+- **Unit Testing**: Cypress / React Testing Library (for frontend), Jest (for backend)
 - **Performance Testing**: JMeter or Locust
 - **Security Testing**: OWASP ZAP or Burp Suite
 - **Browsers**: Chrome (latest), Firefox (latest), Edge (latest), Safari (latest)
