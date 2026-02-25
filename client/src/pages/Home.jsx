@@ -4,6 +4,7 @@ import UserList from '../components/UserList';
 import { useAuth } from '../contexts/AuthContext';
 import { healthCheck } from '../services/api';
 import './Home.css';
+import LandingPage from '../components/LandingPage';
 
 function Home() {
   const { user, logout } = useAuth();
@@ -24,43 +25,14 @@ function Home() {
     checkServerHealth();
   }, []);
 
+  // Landing page content
   return (
     <div className="home">
-      <Header user={user} onLogout={logout} />
-      
-      <main className="main-content">
-        <section className="hero">
-          <h2>Welcome to Project Architects</h2>
-          <p className="subtitle">A modern web application for small tech teams</p>
-          <div className="status-badge">
-            Server Status: <span className={serverStatus.includes('✓') ? 'status-ok' : 'status-error'}>
-              {serverStatus}
-            </span>
-          </div>
-        </section>
-
-        <section className="features">
-          <div className="feature-card">
-            <div className="feature-icon">⚛️</div>
-            <h3>React Frontend</h3>
-            <p>Built with React 19 and Vite for fast development</p>
-          </div>
-          
-          <div className="feature-card">
-            <div className="feature-icon">🚀</div>
-            <h3>Express Backend</h3>
-            <p>RESTful API powered by Node.js and Express</p>
-          </div>
-          
-          <div className="feature-card">
-            <div className="feature-icon">🔥</div>
-            <h3>Firebase Integration</h3>
-            <p>Authentication and Firestore database ready</p>
-          </div>
-        </section>
-
-        <UserList />
-      </main>
+      <Header />
+      <LandingPage />
+      <div className="server-status">
+        <p>Server Status: {serverStatus}</p>
+      </div>
     </div>
   );
 }

@@ -47,13 +47,13 @@ function Header({}) {
             </div>
           ) : (
           <>
-            <button className="w3-large w3-orange w3-hover-grey w3-round-large" onClick={() => setShowLogIn(true)}>Log In</button>
+            <button className="log-in-button" onClick={() => setShowLogIn(true)}>Log In</button>
             {showLogIn && (
             <LoginModal onClose={()=> setShowLogIn(false)} 
               onLogin={handleLogin}
             />
           )}
-          <button className="w3-large w3-orange w3-hover-grey w3-round-large" onClick={() => setShowSignUp(true)}>Sign Up</button>
+          <button className="sign-up-button" onClick={() => setShowSignUp(true)}>Sign Up</button>
           {showSignUp && (
             <SignupModal onClose={()=> setShowSignUp(false)} 
               onSignup={handleSignup}
