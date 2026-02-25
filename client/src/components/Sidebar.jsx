@@ -1,6 +1,7 @@
 import "./Sidebar.css";
 
-function Sidebar({ handleChange, isChecked, setActivePage, isOpen, setIsOpen }) {
+function Sidebar({ handleChange, isDark, setActivePage, isOpen, setIsOpen }) {
+
   return (
     <>
       <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
@@ -24,6 +25,11 @@ function Sidebar({ handleChange, isChecked, setActivePage, isOpen, setIsOpen }) 
               <span className="sidebar-text">Project</span>
             </li>
 
+            <li className="w3-hover-grey" onClick={() => setActivePage("calendar")}>
+              <i className="material-icons">calendar_today</i>
+              <span className="sidebar-text">Calendar</span>
+            </li>
+
             <li className= "w3-hover-grey" onClick={() => setActivePage("about")}>
               <i className="material-icons">info</i>
               <span className="sidebar-text">About</span>
@@ -44,7 +50,7 @@ function Sidebar({ handleChange, isChecked, setActivePage, isOpen, setIsOpen }) 
             id="check"
             className="toggle" 
             onChange={handleChange}
-            checked={isChecked}
+            checked={isDark}
           />
           <label htmlFor="check" className="w3-large"> {isOpen ? "Dark Mode" : ""} </label>
         </div>

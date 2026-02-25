@@ -5,6 +5,8 @@ import "./Dashboard.css";
 import About from "../elements/About"
 import Project from "../elements/Project";
 import Logout from "../elements/Logout";
+import MyCalendar from "../elements/MyCalendar";
+import Home from "../elements/Home";
 
 function Dashboard() {
   const [isDark, setIsDark] = useDarkmode("isDark", false);
@@ -15,6 +17,8 @@ function Dashboard() {
     <div className="App" data-theme={isDark ? "dark" : "light"}>
       <Sidebar isDark={isDark} handleChange={() => setIsDark(!isDark)} setActivePage={setActivePage} isOpen={isOpen} setIsOpen={setIsOpen}/>
       <main className={`content ${isDark ? "dark" : "light"}  ${isOpen ? "expanded" : "collapsed"}`}>
+        {activePage ==="home" && <Home />}
+        {activePage ==="calendar" && <MyCalendar />}
         {activePage ==="about" && <About />}
         {activePage ==="project" && <Project />}
         {activePage ==="logout" && <Logout />}
