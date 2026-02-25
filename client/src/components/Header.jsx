@@ -24,12 +24,14 @@ function Header({}) {
 
   const handleSignup = async (email, password) => {
     try {
-      await signUp(email, password); // Firebase signup
-      setShowSignUp(false);                    // close modal
-      navigate("/dashboard");                  // redirect to Dashboard
+      const userCredential = await signUp(email, password);
+      setShowSignUp(false);                    
+      navigate("/dashboard");                 
+      return userCredential;
     } catch (err) {
       console.error(err);
       alert("Signup failed");
+      throw err;
     }
   };
 
