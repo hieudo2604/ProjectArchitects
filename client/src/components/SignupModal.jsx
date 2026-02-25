@@ -1,21 +1,48 @@
 import React, { useState } from 'react';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../config/firebase';
 import './SignupModal.css';
 
 function SignupModal({ onClose, onSignup }) {
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await onSignup(email, password);
-            onClose();
-        } catch (err) {
-            setError('Signup failed');
-        }
-    };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError(null);
+
+  if (!username) {
+    setError("Username is required");
+    return;
+  }
+
+  try {
+    const userCredential = await onSignup(email, password);
+    const user = userCredential.user;
+
+    console.log("Auth user created:", user.uid);
+
+    try {
+      console.log("Attempting to save user to Firestore...");
+      await setDoc(doc(db, "users", user.uid), {
+        username: username,
+        email: email,
+        createdAt: new Date()
+      });
+      console.log("Saved user successfully!");
+    } catch (firestoreError) {
+      console.error("Error saving user to Firestore:", firestoreError);
+    }
+
+    //onClose();
+
+  } catch (err) {
+    console.error("Signup error:", err);
+    setError(err.message);
+  }
+};
 
   return (
     <div className="modal-backdrop">
@@ -36,14 +63,14 @@ function SignupModal({ onClose, onSignup }) {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-            <input
+          <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-            <div className="modal-actions">
+          <div className="modal-actions">
             <button type="submit" className="btn btn-primary">
               Sign Up
             </button>
@@ -52,6 +79,7 @@ function SignupModal({ onClose, onSignup }) {
             </button>
           </div>
         </form>
+        {error && <p className="error">{error}</p>}
       </div>
     </div>
   );
