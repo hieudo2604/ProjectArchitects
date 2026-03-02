@@ -13,7 +13,7 @@ function Logout() {
     handleLogout();
   }, []);
 
-  return <h2>Logging out...</h2>;
+  return null;
 }
 
 export default Logout;

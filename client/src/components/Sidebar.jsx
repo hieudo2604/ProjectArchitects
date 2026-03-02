@@ -25,11 +25,6 @@ function Sidebar({ handleChange, isDark, setActivePage, isOpen, setIsOpen }) {
               <span className="sidebar-text">Project</span>
             </li>
 
-            <li className="w3-hover-grey" onClick={() => setActivePage("calendar")}>
-              <i className="material-icons">calendar_today</i>
-              <span className="sidebar-text">Calendar</span>
-            </li>
-
             <li className= "w3-hover-grey" onClick={() => setActivePage("about")}>
               <i className="material-icons">info</i>
               <span className="sidebar-text">About</span>
