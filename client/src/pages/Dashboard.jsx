@@ -6,6 +6,7 @@ import About from "../elements/About"
 import Project from "../elements/Project";
 import Logout from "../elements/Logout";
 import Home from "../elements/Home";
+import Notification from "../elements/Notification";
 //console.log("React version:", React.version);
 
 function Dashboard() {
@@ -20,6 +21,7 @@ function Dashboard() {
         {activePage ==="home" && <Home />}
         {activePage ==="about" && <About />}
         {activePage ==="project" && <Project />}
+        {activePage ==="notification" && <Notification />}
         {activePage ==="logout" && <Logout />}
       </main>
     </div>
