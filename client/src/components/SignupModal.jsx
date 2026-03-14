@@ -9,45 +9,73 @@ function SignupModal({ onClose, onSignup }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
+  // Password validation
+  const validatePassword = (password) => {
+    if (password.length < 8) return "At least 8 characters required.";
+    if (!/[A-Z]/.test(password)) return "Must include an uppercase letter.";
+    if (!/[0-9]/.test(password)) return "Must include a number.";
+    return null;
+  };
+
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError(null);
+    e.preventDefault();
+    setError(null);
 
-  if (!username) {
-    setError("Username is required");
-    return;
-  }
-
-  try {
-    const userCredential = await onSignup(email, password);
-    const user = userCredential.user;
-
-    console.log("Auth user created:", user.uid);
-
-    try {
-      console.log("Attempting to save user to Firestore...");
-      await setDoc(doc(db, "users", user.uid), {
-        username: username,
-        email: email,
-        createdAt: new Date()
-      });
-      console.log("Saved user successfully!");
-    } catch (firestoreError) {
-      console.error("Error saving user to Firestore:", firestoreError);
+    if (!username) {
+      setError("Username is required");
+      return;
     }
 
-    //onClose();
+    // Run validation before hitting Firebase
+    const validationError = validatePassword(password);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
 
-  } catch (err) {
-    console.error("Signup error:", err);
-    setError(err.message);
-  }
-};
+    try {
+      const userCredential = await onSignup(email, password);
+      const user = userCredential.user;
+
+      console.log("Auth user created:", user.uid);
+
+      try {
+        console.log("Attempting to save user to Firestore...");
+        await setDoc(doc(db, "users", user.uid), {
+          username: username,
+          email: email,
+          createdAt: new Date()
+        });
+        console.log("Saved user successfully!");
+      } catch (firestoreError) {
+        console.error("Error saving user to Firestore:", firestoreError);
+      }
+
+      //onClose();
+
+    } catch (err) {
+      // Firebase error codes instead of raw err.message
+      switch (err.code) {
+        case "auth/email-already-in-use":
+          setError("This email is already registered.");
+          break;
+        case "auth/invalid-email":
+          setError("Please enter a valid email address.");
+          break;
+        case "auth/weak-password":
+          setError("Password is too weak. Use at least 8 characters.");
+          break;
+        default:
+          setError("Something went wrong. Please try again.");
+      }
+    }
+  };
 
   return (
     <div className="modal-backdrop">
       <div className="modal">
         <h2>Sign Up</h2>
+        {error && <p className="modal-error">{error}</p>} 
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -79,7 +107,6 @@ function SignupModal({ onClose, onSignup }) {
             </button>
           </div>
         </form>
-        {error && <p className="error">{error}</p>}
       </div>
     </div>
   );

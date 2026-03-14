@@ -31,3 +31,100 @@ h2{
     color: black;
 }
 
+/* ── Error message ── */
+.modal-error {
+  color: #d93025;
+  background: #fdf0ef;
+  border: 1px solid #f5c6c3;
+  border-radius: 6px;
+  font-size: 13px;
+  padding: 8px 10px;
+  margin: 4px 0 10px;
+}
+
+/* ── Subtitle ── */
+.modal-subtitle {
+  color: #666;
+  font-size: 14px;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.modal-subtitle strong {
+  color: #111;
+}
+
+/* ── Forgot password link ── */
+.forgot-link {
+  background: none;
+  border: none;
+  color: #4a90e2;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 0;
+  margin: 2px 0 14px;
+  display: inline-block;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.forgot-link:hover {
+  color: #2c6fbd;
+}
+
+/* ── Buttons ── */
+.btn {
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #e0e0e0;
+  background: #f5f5f5;
+  color: #444;
+  transition: background 0.15s;
+}
+
+.btn:hover {
+  background: #e8e8e8;
+}
+
+.btn-primary {
+  background: #4a90e2;
+  color: #fff;
+  border-color: #4a90e2;
+}
+
+.btn-primary:hover {
+  background: #2c6fbd;
+  border-color: #2c6fbd;
+}
+
+/* ── Back button ── */
+.back-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 14px;
+}
+
+.back-btn:hover {
+  color: #111;
+}
+
+/* ── Confirmation (sent) view ── */
+.modal-centered {
+  text-align: center;
+}
+
+.sent-icon {
+  font-size: 44px;
+  margin-bottom: 12px;
+}
+
+.modal-actions-center {
+  justify-content: center;
+}
