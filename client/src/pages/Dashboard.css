@@ -23,3 +23,10 @@
 .content.expanded {
   margin-left: 225px;
 }
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] p {
+  color: #ffffff;
+}

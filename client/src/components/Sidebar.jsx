@@ -25,6 +25,11 @@ function Sidebar({ handleChange, isDark, setActivePage, isOpen, setIsOpen }) {
               <span className="sidebar-text">Project</span>
             </li>
 
+            <li className="w3-hover-grey" onClick={() => setActivePage("board")}>
+              <i className="material-icons">view_kanban</i>
+              <span className="sidebar-text">Board</span>
+            </li>
+
             <li className= "w3-hover-grey" onClick={() => setActivePage("notification")}>
               <i className="material-icons">notifications</i>
               <span className="sidebar-text">Notification</span>

@@ -4,6 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import "./Home.css";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -47,13 +48,15 @@ function Home() {
   return (
     <div>
       {loadingUsername ? (
-        <h1>Loading...</h1>  
+        <h2>Loading...</h2>  
       ) : (
-        <h1>{getGreeting()}, {username || "User"}!</h1>
+        <h2>{getGreeting()}, {username || "User"}!</h2>
       )}
-      <p>Here is your agenda for today</p>
-      <br></br>
-      <Calendar onChange={onChange} value={value} />
+      <h6>Here is your agenda for today</h6>
+      <div className="calendar-wrapper">
+        <Calendar onChange={onChange} value={value} />
+      </div>
+      <h6>Project Directory</h6>
     </div>
   );
 }
