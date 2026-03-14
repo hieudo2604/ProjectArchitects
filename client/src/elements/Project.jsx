@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { getCurrentUser } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import {
   collection,
   query,
@@ -12,7 +13,8 @@ import {
 import { db } from "../config/firebase";
 
 function Project() {
-  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const currentUser = getCurrentUser();
 
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,10 +23,9 @@ function Project() {
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(null);
 
-  // 🔥 Real-time project listener
+  // Retrieve projects from Firestore where current user is a member
   useEffect(() => {
     if (!currentUser) {
-      setProjects([]);
       setLoading(false);
       return;
     }
@@ -32,34 +33,26 @@ function Project() {
     const q = query(
       collection(db, "projects"),
       where("memberIds", "array-contains", currentUser.uid),
-      orderBy("updatedAt", "desc")
+      orderBy("createdAt", "desc")
     );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const projects = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setProjects(projects);
+      setLoading(false);
+    });
 
-    const unsubscribe = onSnapshot(
-      q,
-      (snapshot) => {
-        const results = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-        setProjects(results);
-        setLoading(false);
-      },
-      (err) => {
-        console.error("Error fetching projects:", err);
-        setLoading(false);
-      }
-    );
-
-    return () => unsubscribe();
+    return unsubscribe;
   }, [currentUser]);
+
 
   // ➕ Create Project
   const handleCreateProject = async () => {
-    if (!currentUser) return;
     if (!newProjectName.trim()) {
       setError("Project name cannot be empty.");
+      setCreating(false);
       return;
     }
 
@@ -67,6 +60,7 @@ function Project() {
       setCreating(true);
       setError(null);
 
+      // Create new project in Firestore
       await addDoc(collection(db, "projects"), {
         name: newProjectName.trim(),
         ownerId: currentUser.uid,
@@ -75,7 +69,10 @@ function Project() {
         updatedAt: serverTimestamp()
       });
 
-      setNewProjectName("");
+      setNewProjectName(newProjectName.trim());
+      setProjects((prev) => [...prev, { name: newProjectName.trim(), id: Date.now() }]);
+      navigate(`/projectboard/${newProjectName.trim()}`);
+      { setActivePage(`projectboard/${newProjectName.trim()}`) }
     } catch (err) {
       console.error("Error creating project:", err);
       setError("Failed to create project.");
@@ -84,7 +81,6 @@ function Project() {
     }
   };
 
-  if (loading) return <p>Loading projects...</p>;
 
   return (
     <div style={{ maxWidth: "600px", margin: "0 auto" }}>
@@ -109,6 +105,7 @@ function Project() {
           disabled={creating}
           style={{
             padding: "8px 12px",
+            backgroundColor: creating ? "lightgray" : "lightblue",
             cursor: creating ? "not-allowed" : "pointer"
           }}
         >
@@ -122,11 +119,28 @@ function Project() {
 
       {/* 📋 Project List */}
       {projects.length > 0 ? (
-        <ul>
+        <ul style={{ listStyle: "none", padding: 0 }}>
           {projects.map((project) => (
-            <li key={project.id}>{project.name}</li>
+            <li
+              key={project.id}
+              onClick={() => {
+                navigate(`/projectboard/${project.name}`);
+                setActivePage(`projectboard/${project.name}`);
+              }}
+              style={{
+                padding: "12px",
+                border: "1px solid #000000",
+                borderRadius: "4px",
+                marginBottom: "10px",
+                cursor: "pointer",
+                backgroundColor: "#f9f9f9"
+              }}
+            >
+              {project.name}
+            </li>
           ))}
         </ul>
+
       ) : (
         <p>No projects available. Create one to get started.</p>
       )}

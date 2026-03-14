@@ -5,12 +5,12 @@ import {
   getDoc
 } from "firebase/firestore";
 import { db } from "../config/firebase";
-import { useAuth } from "../contexts/AuthContext";
+import { getCurrentUser } from "../contexts/AuthContext";
 import KanbanBoard from "../components/KanbanBoard";
 
 function ProjectBoard() {
   const { projectId } = useParams();
-  const { currentUser } = useAuth();
+  const { currentUser } = getCurrentUser();
 
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -57,7 +57,7 @@ function ProjectBoard() {
       <h1>{project.name}</h1>
 
       {/* 🔥 Kanban Board */}
-      <KanbanBoard projectId={project.id} />
+      <KanbanBoard projectId={projectId} />
     </div>
   );
 }
