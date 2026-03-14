@@ -19,6 +19,10 @@ export const useAuth = () => {
   return context;
 };
 
+ export const getCurrentUser = () => {
+  return auth.currentUser;
+}
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -50,6 +54,7 @@ export const AuthProvider = ({ children }) => {
     signIn,
     signUp,
     logout,
+    getCurrentUser
   };
 
   return (
