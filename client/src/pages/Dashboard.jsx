@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import "./Dashboard.css";
 import About from "../elements/About"
 import Project from "../elements/Project";
+import ProjectBoard from "../elements/ProjectBoard";
 import Logout from "../elements/Logout";
 import Home from "../elements/Home";
 import Notification from "../elements/Notification";
@@ -20,7 +21,8 @@ function Dashboard() {
       <main className={`content ${isDark ? "dark" : "light"}  ${isOpen ? "expanded" : "collapsed"}`}>
         {activePage ==="home" && <Home />}
         {activePage ==="about" && <About />}
-        {activePage ==="project" && <Project />}
+        {activePage === "project" && <Project setActivePage={setActivePage} />}
+        {activePage === "board" && <ProjectBoard />}
         {activePage ==="notification" && <Notification />}
         {activePage ==="logout" && <Logout />}
       </main>
