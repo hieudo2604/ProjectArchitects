@@ -3,6 +3,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { useAuth } from './contexts/AuthContext';
 import Home from './pages/Home';
 import Dashboard from "./pages/Dashboard";
+import ProjectBoard from "./pages/ProjectBoard";
 
 //if user is not logged in and tries to visit /dashboard, they get redirected to /
 function ProtectedRoute({ children }) {
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<PublicRoute><Home /></PublicRoute>} /> 
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/projectboard/:projectId" element={<ProtectedRoute><ProjectBoard /></ProtectedRoute>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>  

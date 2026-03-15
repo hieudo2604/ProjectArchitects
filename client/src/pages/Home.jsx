@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from '../components/Header';
-import UserList from '../components/UserList';
+import './Home.css';
 import { useAuth } from '../contexts/AuthContext';
 import { healthCheck } from '../services/api';
 import './Home.css';

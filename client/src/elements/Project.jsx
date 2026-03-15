@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getCurrentUser } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import ProjectBoard from "../pages/ProjectBoard";
 import {
   collection,
   query,
@@ -22,6 +24,11 @@ function Project() {
   const [newProjectName, setNewProjectName] = useState("");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(null);
+
+  // Function to navigate to project board
+  const goToProjectBoard = (projectName) => {
+    navigate(`/projectboard/${projectName}`);
+  };
 
   // Retrieve projects from Firestore where current user is a member
   useEffect(() => {
@@ -71,8 +78,7 @@ function Project() {
 
       setNewProjectName(newProjectName.trim());
       setProjects((prev) => [...prev, { name: newProjectName.trim(), id: Date.now() }]);
-      navigate(`/projectboard/${newProjectName.trim()}`);
-      { setActivePage(`projectboard/${newProjectName.trim()}`) }
+      goToProjectBoard(newProjectName.trim());
     } catch (err) {
       console.error("Error creating project:", err);
       setError("Failed to create project.");
@@ -124,8 +130,7 @@ function Project() {
             <li
               key={project.id}
               onClick={() => {
-                navigate(`/projectboard/${project.name}`);
-                setActivePage(`projectboard/${project.name}`);
+                goToProjectBoard(project.name);
               }}
               style={{
                 padding: "12px",

@@ -5,6 +5,7 @@ import { db } from "../config/firebase";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import "./Home.css";
+import Header from "../components/Header";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -47,6 +48,7 @@ function Home() {
 
   return (
     <div>
+      <Header />
       {loadingUsername ? (
         <h2>Loading...</h2>  
       ) : (

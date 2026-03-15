@@ -1,0 +1,22 @@
+.container {
+    display: flex;  
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.input {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+.button {
+    border: none;
+    border-radius: 10px;
+    padding: 10, 15px;
+    background-color: #2563eb;
+    color: white;
+    font-size: 16px;
+}

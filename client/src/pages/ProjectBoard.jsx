@@ -1,65 +1,68 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React from "react";
 import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
   doc,
-  getDoc
+  updateDoc
 } from "firebase/firestore";
+import { Column } from "../components/Column/Column";
+import { useEffect, useState } from "react";
 import { db } from "../config/firebase";
-import { getCurrentUser } from "../contexts/AuthContext";
-import KanbanBoard from "../components/KanbanBoard";
+import { DndContext, closestCorners } from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
+import { Input } from "../components/Input/Input";
 
-function ProjectBoard() {
-  const { projectId } = useParams();
-  const { currentUser } = getCurrentUser();
+export default function KanbanBoard() {
+  const [tasks, setTasks] = useState([
+    { id: "1", title: "Task 1", column: "Todo" },
+    { id: "2", title: "Task 2", column: "In Progress" },
+    { id: "3", title: "Task 3", column: "Done" }
+  ]);
 
-  const [project, setProject] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [unauthorized, setUnauthorized] = useState(false);
+  const [columns, setColumns] = useState([
+    { id: "1", name: "To Do", content: "Market Research"},
+    { id: "2", name: "In Progress", content: "Design Wireframes"},
+    { id: "3", name: "Done", content: "Review and Testing" }
+  ]);
 
-  useEffect(() => {
-    const fetchProject = async () => {
-      if (!projectId || !currentUser) return;
+  const [activeColumns, setActiveColumns] = useState("todo");
 
-      try {
-        const projectRef = doc(db, "projects", projectId);
-        const projectSnap = await getDoc(projectRef);
-
-        if (!projectSnap.exists()) {
-          setUnauthorized(true);
-          setLoading(false);
-          return;
-        }
-
-        const projectData = projectSnap.data();
-
-        // 🔐 Validate membership
-        if (!projectData.memberIds.includes(currentUser.uid)) {
-          setUnauthorized(true);
-        } else {
-          setProject({ id: projectSnap.id, ...projectData });
-        }
-      } catch (err) {
-        console.error(err);
-        setUnauthorized(true);
-      } finally {
-        setLoading(false);
-      }
+  const addTask = (title, column) => {
+    const newTask = {
+      id: Date.now().toString(),
+      title,
+      column
     };
+    setTasks((prev) => [...prev, newTask]);
+  };
 
-    fetchProject();
-  }, [projectId, currentUser]);
+  const removeTask = (columnId, taskId) => {
+    setTasks((prev) => prev.filter(task => task.id !== taskId));
+  };
 
-  if (loading) return <p>Loading project...</p>;
-  if (unauthorized) return <p>You do not have access to this project.</p>;
+  const getTaskPos = (id) => tasks.findIndex(task => task.id === id);
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    
+    if (active.id == over.id) return;
+    
+    setTasks((tasks) => {
+      const orignalPos = getTaskPos(active.id);
+      const newPos = getTaskPos(over.id);
+
+      return arrayMove(tasks, orignalPos, newPos);
+    });
+  };
 
   return (
-    <div>
-      <h1>{project.name}</h1>
-
-      {/* 🔥 Kanban Board */}
-      <KanbanBoard projectId={projectId} />
-    </div>
+    <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+      <div style={{ display: "flex", gap: "16px", textAlign: "center" }}>
+        <Input onSubmit={addTask} />
+        <Column tasks={tasks} columns={columns} />
+      </div>
+    </DndContext>
   );
 }
-
-export default ProjectBoard;

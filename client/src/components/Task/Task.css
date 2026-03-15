@@ -1,0 +1,19 @@
+.task {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16);
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    touch-action: none;
+    user-select: none; /* Prevents text selection during drag */
+}
+
+.checkbox {
+    margin-right: 8px;
+    height: 16px;
+    width: 16px;
+}

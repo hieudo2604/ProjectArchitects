@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Header.css';
+import "./Header.css";
 import { useAuth } from '../contexts/AuthContext';
 import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
