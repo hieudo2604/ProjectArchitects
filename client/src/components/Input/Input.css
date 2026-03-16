@@ -1,5 +1,5 @@
-.container {
-    display: flex;  
+.container { 
+    display: flex; 
     gap: 8px;
     margin-bottom: 16px;
 }
@@ -12,11 +12,13 @@
     border: 1px solid #ccc;
     border-radius: 10px;
 }
+
 .button {
     border: none;
     border-radius: 10px;
-    padding: 10, 15px;
+    padding: 10px 15px;
     background-color: #2563eb;
     color: white;
     font-size: 16px;
 }
+

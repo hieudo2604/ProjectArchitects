@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getCurrentUser } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import ProjectBoard from "../pages/ProjectBoard";
+//import { useNavigate } from "react-router-dom";
 import {
   collection,
   query,
@@ -14,8 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 
-function Project() {
-  const navigate = useNavigate();
+function Project({ setActivePage }) {
   const currentUser = getCurrentUser();
 
   const [projects, setProjects] = useState([]);
@@ -26,9 +23,9 @@ function Project() {
   const [error, setError] = useState(null);
 
   // Function to navigate to project board
-  const goToProjectBoard = (projectName) => {
-    navigate(`/projectboard/${projectName}`);
-  };
+  //const goToProjectBoard = (projectName) => {
+    //navigate(`/projectboard/${projectName}`);
+  //};
 
   // Retrieve projects from Firestore where current user is a member
   useEffect(() => {
@@ -78,7 +75,7 @@ function Project() {
 
       setNewProjectName(newProjectName.trim());
       setProjects((prev) => [...prev, { name: newProjectName.trim(), id: Date.now() }]);
-      goToProjectBoard(newProjectName.trim());
+      //goToProjectBoard(newProjectName.trim());
     } catch (err) {
       console.error("Error creating project:", err);
       setError("Failed to create project.");
@@ -123,31 +120,30 @@ function Project() {
         )}
       </div>
 
-      {/* 📋 Project List */}
-      {projects.length > 0 ? (
+      {/* Project List */}
+      {loading ? (
+        <p>Loading projects...</p>
+      ) : projects.length === 0 ? (
+        <p>No projects yet. Create one to get started.</p>
+      ) : (
         <ul style={{ listStyle: "none", padding: 0 }}>
           {projects.map((project) => (
             <li
               key={project.id}
-              onClick={() => {
-                goToProjectBoard(project.name);
-              }}
+              onClick={() => setActivePage("board", project.id)}
               style={{
                 padding: "12px",
-                border: "1px solid #000000",
+                border: "1px solid #888",
                 borderRadius: "4px",
                 marginBottom: "10px",
                 cursor: "pointer",
-                backgroundColor: "#f9f9f9"
+                backgroundColor: "transparent"
               }}
             >
               {project.name}
             </li>
           ))}
         </ul>
-
-      ) : (
-        <p>No projects available. Create one to get started.</p>
       )}
     </div>
   );

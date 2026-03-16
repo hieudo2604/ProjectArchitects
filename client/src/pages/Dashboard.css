@@ -27,6 +27,7 @@
 [data-theme="dark"] h1,
 [data-theme="dark"] h2,
 [data-theme="dark"] h3,
-[data-theme="dark"] p {
+[data-theme="dark"] p 
+{
   color: #ffffff;
 }

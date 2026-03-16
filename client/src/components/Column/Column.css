@@ -8,3 +8,11 @@
     flex-direction: column;
     gap: 12px;
 }
+
+.dark .column {
+    background-color: #F0F2F5;
+}
+
+.dark .column-title {
+    color: #000;
+}

@@ -4,10 +4,10 @@ import Sidebar from "../components/Sidebar";
 import "./Dashboard.css";
 import About from "../elements/About"
 import Project from "../elements/Project";
-import ProjectBoard from "../elements/ProjectBoard";
 import Logout from "../elements/Logout";
 import Home from "../elements/Home";
 import Notification from "../elements/Notification";
+import ProjectBoard from "../pages/ProjectBoard";
 //console.log("React version:", React.version);
 
 function Dashboard() {

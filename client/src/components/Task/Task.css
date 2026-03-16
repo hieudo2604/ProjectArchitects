@@ -17,3 +17,8 @@
     height: 16px;
     width: 16px;
 }
+
+.dark .task {
+    color: #ffffff;
+    background-color: #2a2a2a;
+}

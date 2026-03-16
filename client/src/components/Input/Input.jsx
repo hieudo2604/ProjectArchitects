@@ -25,6 +25,7 @@ export const Input = ({ onSubmit }) => {
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Enter a new task..."
                 />
+                <br></br>
                 <button type="submit" className="button">Add Task</button>
             </form>
         </div>
