@@ -11,6 +11,7 @@ import {
   serverTimestamp
 } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { doc, deleteDoc } from "firebase/firestore";
 
 function Project({ setActivePage }) {
   const currentUser = getCurrentUser();
@@ -26,6 +27,21 @@ function Project({ setActivePage }) {
   //const goToProjectBoard = (projectName) => {
     //navigate(`/projectboard/${projectName}`);
   //};
+
+  const handleDelete = (projectId) => {
+    if (window.confirm("Are you sure you want to delete this project?")) {
+      deleteProject(projectId);
+    }
+  }
+
+  const deleteProject = async (projectId) => {
+    try {
+      await deleteDoc(doc(db, "projects", projectId));
+      setProjects((prev) => prev.filter((p) => p.id !== projectId));
+    } catch (err) {
+      console.error("Failed to delete project:", err);
+    }
+  };
 
   // Retrieve projects from Firestore where current user is a member
   useEffect(() => {
@@ -141,6 +157,24 @@ function Project({ setActivePage }) {
               }}
             >
               {project.name}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); 
+                  handleDelete(project.id);
+                }}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#888",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                  padding: "0px, 0px, 0px, 32px",              
+                  lineHeight: 1,
+                }}
+                title="Delete project"
+              >
+                ✕
+              </button>
             </li>
           ))}
         </ul>
