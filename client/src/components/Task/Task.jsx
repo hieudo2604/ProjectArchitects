@@ -27,6 +27,7 @@ export const Task = ({ id, title }) => {
       className="task"
     >
       <input type="checkbox" className="checkbox"/>
+      Task ID: {id}<br></br>
       {title}
     </div>
   );
