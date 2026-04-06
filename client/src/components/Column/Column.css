@@ -9,10 +9,75 @@
     gap: 12px;
 }
 
+.column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.column-title {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.column-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 999px;
+    padding: 4px 8px;
+    white-space: nowrap;
+}
+
+.badge-todo {
+    background: #dbeafe;
+    color: #1e3a8a;
+}
+
+.badge-in-progress {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-done {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-default {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.task-count {
+    min-width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #111827;
+    background: #e5e7eb;
+}
+
 .dark .column {
     background-color: #F0F2F5;
 }
 
 .dark .column-title {
     color: #000;
+}
+
+.dark .task-count {
+    background: #d1d5db;
 }
