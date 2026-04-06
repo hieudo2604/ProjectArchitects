@@ -23,21 +23,34 @@ function Project({ setActivePage }) {
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(null);
 
+  const sendNotification = async (title, body) => {
+    await addDoc(collection(db, "users", currentUser.uid, "notifications"), {
+      title,
+      body,
+      read: false,
+      createdAt: serverTimestamp()
+    });
+  };
+
   // Function to navigate to project board
   //const goToProjectBoard = (projectName) => {
     //navigate(`/projectboard/${projectName}`);
   //};
 
-  const handleDelete = (projectId) => {
+  const handleDelete = (projectId, projectName) => {
     if (window.confirm("Are you sure you want to delete this project?")) {
-      deleteProject(projectId);
+      deleteProject(projectId, projectName);
     }
   }
 
-  const deleteProject = async (projectId) => {
+  const deleteProject = async (projectId, projectName) => {
     try {
       await deleteDoc(doc(db, "projects", projectId));
       setProjects((prev) => prev.filter((p) => p.id !== projectId));
+      await sendNotification(
+        "Project Deleted",
+        `Project "${projectName}" has been deleted.`
+      );
     } catch (err) {
       console.error("Failed to delete project:", err);
     }
@@ -68,7 +81,7 @@ function Project({ setActivePage }) {
   }, [currentUser]);
 
 
-  // ➕ Create Project
+  // Create Project
   const handleCreateProject = async () => {
     if (!newProjectName.trim()) {
       setError("Project name cannot be empty.");
@@ -89,7 +102,12 @@ function Project({ setActivePage }) {
         updatedAt: serverTimestamp()
       });
 
-      setNewProjectName(newProjectName.trim());
+      await sendNotification(
+        "Project Created",
+        `Project "${newProjectName.trim()}" has been created successfully.`
+      );
+
+      setNewProjectName();
       setProjects((prev) => [...prev, { name: newProjectName.trim(), id: Date.now() }]);
       //goToProjectBoard(newProjectName.trim());
     } catch (err) {
@@ -160,7 +178,7 @@ function Project({ setActivePage }) {
               <button
                 onClick={(e) => {
                   e.stopPropagation(); 
-                  handleDelete(project.id);
+                  handleDelete(project.id, project.name);
                 }}
                 style={{
                   background: "none",

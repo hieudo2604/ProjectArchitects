@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import useDarkmode from "../components/Darkmode";
 import Sidebar from "../components/Sidebar";
 import "./Dashboard.css";
@@ -12,8 +13,12 @@ import ProjectBoard from "../pages/ProjectBoard";
 
 function Dashboard() {
   const [isDark, setIsDark] = useDarkmode("isDark", false);
-  const [activePage, setActivePage] = useState("home");
   const [isOpen, setIsOpen] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const activePage = new URLSearchParams(location.search).get("page") || "home";
+
+  const setActivePage = (page) => navigate(`/dashboard?page=${page}`);
 
   return (
     <div className="App" data-theme={isDark ? "dark" : "light"}>

@@ -1,6 +1,22 @@
+import { useEffect, useState } from "react";
+import { collection, query, onSnapshot } from "firebase/firestore";
+import { db } from "../config/firebase";
+import { useAuth } from "../contexts/AuthContext";
 import "./Sidebar.css";
 
 function Sidebar({ handleChange, isDark, setActivePage, isOpen, setIsOpen }) {
+
+  const { user } = useAuth();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    const q = query(collection(db, "users", user.uid, "notifications"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setUnreadCount(snapshot.docs.filter((d) => !d.data().read).length);
+    });
+    return () => unsubscribe();
+  }, [user]);
 
   return (
     <>
@@ -32,7 +48,8 @@ function Sidebar({ handleChange, isDark, setActivePage, isOpen, setIsOpen }) {
 
             <li className= "w3-hover-grey" onClick={() => setActivePage("notification")}>
               <i className="material-icons">notifications</i>
-              <span className="sidebar-text">Notification</span>
+              <span className="sidebar-text">Notification </span>
+              {unreadCount > 0 && <span className="notif-badge">{unreadCount}</span>}
             </li>
 
             <li className= "w3-hover-grey" onClick={() => setActivePage("about")}>
