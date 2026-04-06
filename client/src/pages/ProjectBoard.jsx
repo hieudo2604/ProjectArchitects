@@ -292,12 +292,12 @@ export default function KanbanBoard() {
         return;
       }
 
-      const memberUid = userSnapshot.docs[0].id;
-      const projectRef = doc(db, "projects", projectId);
-
+      // Get the first matching user (should only be one due to unique email constraint)
+      const { id: memberId } = userSnapshot.docs[0];
+      // Add memberId to project's memberIds array
+      const { id: projectRef } = doc(db, "projects", projectId);
       await updateDoc(projectRef, {
-        memberIds: arrayUnion(memberUid),
-        updatedAt: serverTimestamp()
+        memberIds: arrayUnion(memberId)
       });
 
       setMemberMessage("Member added to board.");
