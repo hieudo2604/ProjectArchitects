@@ -5,7 +5,14 @@ import { verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useDroppable } from "@dnd-kit/core";
 import { Task } from "../Task/Task";
 
-export const Column = ({ columnId, title, tasks = [] }) => {
+export const Column = ({
+  columnId,
+  title,
+  tasks = [],
+  members = [],
+  currentUserId,
+  onToggleAssignment
+}) => {
   const { setNodeRef } = useDroppable({ id: columnId });
   const taskCount = tasks.length;
 
@@ -29,7 +36,15 @@ export const Column = ({ columnId, title, tasks = [] }) => {
         strategy={verticalListSortingStrategy}
       >
         {tasks.map((task) => (
-          <Task key={task.id} id={task.id} title={task.title} />
+          <Task
+            key={task.id}
+            id={task.id}
+            title={task.title}
+            assignedUserIds={task.assignedUserIds}
+            members={members}
+            currentUserId={currentUserId}
+            onToggleAssignment={onToggleAssignment}
+          />
         ))}
       </SortableContext>
     </div>

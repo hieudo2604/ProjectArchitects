@@ -12,6 +12,58 @@
     user-select: none; /* Prevents text selection during drag */
 }
 
+.task-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+    text-align: left;
+}
+
+.task-meta {
+    font-size: 12px;
+    color: #555;
+}
+
+.task-title {
+    font-weight: 600;
+}
+
+.task-assignees {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.assignee-pill {
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    background-color: #e7f1ff;
+    color: #1e3a8a;
+}
+
+.task-unassigned {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.assign-button {
+    border: none;
+    border-radius: 6px;
+    background-color: #1d4ed8;
+    color: #fff;
+    padding: 6px 10px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.assign-button:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
 .checkbox {
     margin-right: 8px;
     height: 16px;
@@ -21,4 +73,14 @@
 .dark .task {
     color: #ffffff;
     background-color: #2a2a2a;
+}
+
+.dark .task-meta,
+.dark .task-unassigned {
+    color: #cbd5e1;
+}
+
+.dark .assignee-pill {
+    background-color: #1e40af;
+    color: #dbeafe;
 }

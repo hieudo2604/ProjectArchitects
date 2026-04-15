@@ -29,13 +29,14 @@ const KANBAN_COLUMNS = [
   { id: "done", name: "Done" }
 ];
 
-export default function KanbanBoard() {
-  const { projectId } = useParams();
+export default function KanbanBoard({ projectId: projectIdProp }) {
+  const { projectId: routeProjectId } = useParams();
+  const projectId = projectIdProp || routeProjectId;
   const { user } = useAuth();
   const [tasksByColumn, setTasksByColumn] = useState({
-    todo: [{ id: "1", title: "Task 1" }],
-    "in-progress": [{ id: "2", title: "Task 2" }],
-    done: [{ id: "3", title: "Task 3" }]
+    todo: [{ id: "1", title: "Task 1", assignedUserIds: [] }],
+    "in-progress": [{ id: "2", title: "Task 2", assignedUserIds: [] }],
+    done: [{ id: "3", title: "Task 3", assignedUserIds: [] }]
   });
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
@@ -90,7 +91,8 @@ export default function KanbanBoard() {
   const addTask = (title, column) => {
     const newTask = {
       id: Date.now().toString(),
-      title
+      title,
+      assignedUserIds: []
     };
 
     setTasksByColumn((prev) => ({
@@ -122,6 +124,44 @@ export default function KanbanBoard() {
   };
 
   const isColumnId = (id) => KANBAN_COLUMNS.some((column) => column.id === id);
+
+  const toggleCurrentUserAssignment = (taskId) => {
+    if (!user?.uid) {
+      return;
+    }
+
+    setTasksByColumn((prev) => {
+      const nextState = { ...prev };
+
+      for (const column of KANBAN_COLUMNS) {
+        const columnId = column.id;
+        const taskIndex = nextState[columnId].findIndex((task) => task.id === taskId);
+
+        if (taskIndex === -1) {
+          continue;
+        }
+
+        const task = nextState[columnId][taskIndex];
+        const assignedUserIds = Array.isArray(task.assignedUserIds)
+          ? task.assignedUserIds
+          : [];
+        const isAssigned = assignedUserIds.includes(user.uid);
+
+        const updatedTask = {
+          ...task,
+          assignedUserIds: isAssigned
+            ? assignedUserIds.filter((assignedUserId) => assignedUserId !== user.uid)
+            : [...assignedUserIds, user.uid]
+        };
+
+        nextState[columnId] = [...nextState[columnId]];
+        nextState[columnId][taskIndex] = updatedTask;
+        break;
+      }
+
+      return nextState;
+    });
+  };
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -200,6 +240,9 @@ export default function KanbanBoard() {
         tasksByColumn[column.id].map((task, index) => ({
           id: task.id,
           title: task.title,
+          assignedUserIds: Array.isArray(task.assignedUserIds)
+            ? task.assignedUserIds
+            : [],
           columnId: column.id,
           order: index,
           updatedBy: user.uid
@@ -237,6 +280,7 @@ export default function KanbanBoard() {
           taskRef,
           {
             title: task.title,
+            assignedUserIds: task.assignedUserIds,
             columnId: task.columnId,
             order: task.order,
             updatedAt: serverTimestamp(),
@@ -295,7 +339,7 @@ export default function KanbanBoard() {
       // Get the first matching user (should only be one due to unique email constraint)
       const { id: memberId } = userSnapshot.docs[0];
       // Add memberId to project's memberIds array
-      const { id: projectRef } = doc(db, "projects", projectId);
+      const projectRef = doc(db, "projects", projectId);
       await updateDoc(projectRef, {
         memberIds: arrayUnion(memberId)
       });
@@ -413,6 +457,9 @@ export default function KanbanBoard() {
             columnId={column.id}
             title={column.name}
             tasks={tasksByColumn[column.id]}
+            members={members}
+            currentUserId={user?.uid}
+            onToggleAssignment={toggleCurrentUserAssignment}
           />
         ))}
       </div>

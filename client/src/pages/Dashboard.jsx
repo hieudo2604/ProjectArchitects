@@ -17,8 +17,20 @@ function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
   const activePage = new URLSearchParams(location.search).get("page") || "home";
+  const selectedProjectId = new URLSearchParams(location.search).get("projectId");
 
-  const setActivePage = (page) => navigate(`/dashboard?page=${page}`);
+  const setActivePage = (page, projectId) => {
+    const searchParams = new URLSearchParams();
+    searchParams.set("page", page);
+
+    if (projectId) {
+      searchParams.set("projectId", projectId);
+    } else if (page === "board" && selectedProjectId) {
+      searchParams.set("projectId", selectedProjectId);
+    }
+
+    navigate(`/dashboard?${searchParams.toString()}`);
+  };
 
   return (
     <div className="App" data-theme={isDark ? "dark" : "light"}>
@@ -27,7 +39,7 @@ function Dashboard() {
         {activePage ==="home" && <Home />}
         {activePage ==="about" && <About />}
         {activePage === "project" && <Project setActivePage={setActivePage} />}
-        {activePage === "board" && <ProjectBoard />}
+        {activePage === "board" && <ProjectBoard projectId={selectedProjectId} />}
         {activePage ==="notification" && <Notification />}
         {activePage ==="logout" && <Logout />}
       </main>
