@@ -32,11 +32,6 @@ function Project({ setActivePage }) {
     });
   };
 
-  // Function to navigate to project board
-  //const goToProjectBoard = (projectName) => {
-    //navigate(`/projectboard/${projectName}`);
-  //};
-
   const handleDelete = (projectId, projectName) => {
     if (window.confirm("Are you sure you want to delete this project?")) {
       deleteProject(projectId, projectName);
@@ -123,7 +118,7 @@ function Project({ setActivePage }) {
     <div style={{ maxWidth: "600px", margin: "0 auto" }}>
       <h1>Projects</h1>
 
-      {/* ➕ Create Project UI */}
+      {/* Create Project UI */}
       <div style={{ marginBottom: "20px" }}>
         <input
           type="text"

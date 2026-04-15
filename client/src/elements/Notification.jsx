@@ -49,6 +49,25 @@ function Notification() {
     const unreadCount = notifications.filter(notif => !notif.read).length;
     if (loading) return <div>Loading...</div>;
 
+    const handleDelete = (notifId, projectName) => {
+    if (window.confirm("Are you sure you want to delete this notification?")) {
+      deleteNotification(notifId, projectName);
+    }
+  }
+
+    const deleteNotification = async (notifId, projectName) => {
+      try {
+        await deleteDoc(doc(db, "projects", notifId));
+        setProjects((prev) => prev.filter((p) => p.id !== notifId));
+        await sendNotification(
+        "Project Deleted",
+        `Project "${projectName}" has been deleted.`
+        );
+      } catch (err) {
+          console.error("Failed to delete project:", err);
+      }
+    }
+
     return (
     <div className="notification-page">
       <ToastContainer position="top-right" />
