@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Column } from "../components/Column/Column";
-import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useParams } from "react-router-dom";
 import { DndContext, closestCorners } from "@dnd-kit/core";
@@ -29,15 +28,17 @@ const KANBAN_COLUMNS = [
   { id: "done", name: "Done" }
 ];
 
+const createEmptyBoard = () => ({
+  todo: [],
+  "in-progress": [],
+  done: []
+});
+
 export default function KanbanBoard({ projectId: projectIdProp }) {
   const { projectId: routeProjectId } = useParams();
   const projectId = projectIdProp || routeProjectId;
   const { user } = useAuth();
-  const [tasksByColumn, setTasksByColumn] = useState({
-    todo: [{ id: "1", title: "Task 1", assignedUserIds: [] }],
-    "in-progress": [{ id: "2", title: "Task 2", assignedUserIds: [] }],
-    done: [{ id: "3", title: "Task 3", assignedUserIds: [] }]
-  });
+  const [tasksByColumn, setTasksByColumn] = useState(createEmptyBoard);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const [memberEmail, setMemberEmail] = useState("");
@@ -45,13 +46,16 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
   const [memberMessage, setMemberMessage] = useState("");
   const [members, setMembers] = useState([]);
   const [membersLoading, setMembersLoading] = useState(true);
+  const [boardLoading, setBoardLoading] = useState(true);
 
   useEffect(() => {
     if (!projectId) {
       setMembers([]);
       setMembersLoading(false);
-      return;
+      return undefined;
     }
+
+    setMembersLoading(true);
 
     const projectRef = doc(db, "projects", projectId);
     const unsubscribe = onSnapshot(projectRef, async (projectSnapshot) => {
@@ -88,6 +92,113 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
     return unsubscribe;
   }, [projectId]);
 
+  useEffect(() => {
+    let isActive = true;
+
+    if (!projectId) {
+      setTasksByColumn(createEmptyBoard());
+      setBoardLoading(false);
+      setSaveMessage("");
+      return undefined;
+    }
+
+    setBoardLoading(true);
+    setSaveMessage("");
+
+    const loadBoardState = async () => {
+      try {
+        const projectRef = doc(db, "projects", projectId);
+        const [projectSnapshot, tasksSnapshot] = await Promise.all([
+          getDoc(projectRef),
+          getDocs(collection(db, "projects", projectId, "tasks"))
+        ]);
+
+        if (!isActive) {
+          return;
+        }
+
+        if (!projectSnapshot.exists()) {
+          setTasksByColumn(createEmptyBoard());
+          return;
+        }
+
+        const taskDocsById = new Map(
+          tasksSnapshot.docs.map((taskDoc) => [
+            taskDoc.id,
+            { id: taskDoc.id, ...taskDoc.data() }
+          ])
+        );
+        const boardState = projectSnapshot.data()?.boardState;
+
+        if (boardState?.taskIdsByColumn) {
+          const restoredState = KANBAN_COLUMNS.reduce((accumulator, column) => {
+            const taskIds = Array.isArray(boardState.taskIdsByColumn[column.id])
+              ? boardState.taskIdsByColumn[column.id]
+              : [];
+
+            accumulator[column.id] = taskIds
+              .map((taskId) => taskDocsById.get(taskId))
+              .filter(Boolean)
+              .map((task) => ({
+                id: task.id,
+                title: task.title || "Untitled task",
+                assignedUserIds: Array.isArray(task.assignedUserIds)
+                  ? task.assignedUserIds
+                  : []
+              }));
+
+            return accumulator;
+          }, createEmptyBoard());
+
+          setTasksByColumn(restoredState);
+          return;
+        }
+
+        const fallbackState = createEmptyBoard();
+        tasksSnapshot.docs.forEach((taskDoc) => {
+          const taskData = taskDoc.data();
+          const columnId = KANBAN_COLUMNS.some((column) => column.id === taskData.columnId)
+            ? taskData.columnId
+            : "todo";
+
+          fallbackState[columnId].push({
+            id: taskDoc.id,
+            title: taskData.title || "Untitled task",
+            assignedUserIds: Array.isArray(taskData.assignedUserIds)
+              ? taskData.assignedUserIds
+              : [],
+            order: typeof taskData.order === "number" ? taskData.order : 0
+          });
+        });
+
+        KANBAN_COLUMNS.forEach((column) => {
+          fallbackState[column.id].sort((leftTask, rightTask) => {
+            const leftOrder = typeof leftTask.order === "number" ? leftTask.order : 0;
+            const rightOrder = typeof rightTask.order === "number" ? rightTask.order : 0;
+            return leftOrder - rightOrder;
+          });
+
+          fallbackState[column.id] = fallbackState[column.id].map(({ order, ...task }) => task);
+        });
+
+        setTasksByColumn(fallbackState);
+      } catch (error) {
+        console.error("Error loading board state:", error);
+        setTasksByColumn(createEmptyBoard());
+      } finally {
+        if (isActive) {
+          setBoardLoading(false);
+        }
+      }
+    };
+
+    loadBoardState();
+
+    return () => {
+      isActive = false;
+    };
+  }, [projectId]);
+
   const addTask = (title, column) => {
     const newTask = {
       id: Date.now().toString(),
@@ -101,7 +212,6 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
     }));
   };
 
-  // Delete task function (not used in this snippet, but can be implemented similarly to addTask)
   const deleteTask = (taskId) => {
     setTasksByColumn((prev) => {
       const newState = { ...prev };
@@ -261,9 +371,9 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
         {
           boardState: {
             columns: boardColumns,
-            taskIdsByColumn: KANBAN_COLUMNS.reduce((acc, column) => {
-              acc[column.id] = tasksByColumn[column.id].map((task) => task.id);
-              return acc;
+            taskIdsByColumn: KANBAN_COLUMNS.reduce((accumulator, column) => {
+              accumulator[column.id] = tasksByColumn[column.id].map((task) => task.id);
+              return accumulator;
             }, {}),
             totalTasks: flatTasks.length,
             lastSavedAt: serverTimestamp(),
@@ -336,9 +446,7 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
         return;
       }
 
-      // Get the first matching user (should only be one due to unique email constraint)
       const { id: memberId } = userSnapshot.docs[0];
-      // Add memberId to project's memberIds array
       const projectRef = doc(db, "projects", projectId);
       await updateDoc(projectRef, {
         memberIds: arrayUnion(memberId)
@@ -445,10 +553,10 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
             </ul>
           )}
         </div>
-        {saveMessage ? (
-          <p style={{ marginTop: "8px" }}>{saveMessage}</p>
-        ) : null}
+        {saveMessage ? <p style={{ marginTop: "8px" }}>{saveMessage}</p> : null}
       </div>
+
+      {boardLoading ? <p>Loading board...</p> : null}
 
       <div style={{ display: "flex", gap: "16px", textAlign: "center" }}>
         {KANBAN_COLUMNS.map((column) => (
