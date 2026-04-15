@@ -4,7 +4,14 @@ import  "./Task.css";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-export const Task = ({ id, title }) => {
+export const Task = ({
+  id,
+  title,
+  assignedUserIds = [],
+  members = [],
+  currentUserId,
+  onToggleAssignment
+}) => {
   const {
     attributes,
     listeners,
@@ -18,6 +25,25 @@ export const Task = ({ id, title }) => {
     transition
   };
 
+  const normalizedAssignedUserIds = Array.isArray(assignedUserIds)
+    ? assignedUserIds
+    : [];
+  const isAssignedToCurrentUser = Boolean(
+    currentUserId && normalizedAssignedUserIds.includes(currentUserId)
+  );
+
+  const assignedMembers = normalizedAssignedUserIds.map((assignedUserId) => {
+    const member = members.find((item) => item.id === assignedUserId);
+
+    return {
+      id: assignedUserId,
+      label:
+        member?.username ||
+        member?.email ||
+        (assignedUserId === currentUserId ? "You" : assignedUserId)
+    };
+  });
+
   return (
     <div
       ref={setNodeRef}
@@ -26,9 +52,34 @@ export const Task = ({ id, title }) => {
       {...listeners}
       className="task"
     >
-      <input type="checkbox" className="checkbox"/>
-      Task ID: {id}<br></br>
-      {title}
+      <input type="checkbox" className="checkbox" />
+      <div className="task-content">
+        <div className="task-meta">Task ID: {id}</div>
+        <div className="task-title">{title}</div>
+        <div className="task-assignees">
+          {assignedMembers.length > 0 ? (
+            assignedMembers.map((assignedMember) => (
+              <span key={assignedMember.id} className="assignee-pill">
+                {assignedMember.label}
+              </span>
+            ))
+          ) : (
+            <span className="task-unassigned">No assignees</span>
+          )}
+        </div>
+        <button
+          type="button"
+          className="assign-button"
+          onPointerDown={(event) => event.stopPropagation()}
+          onClick={(event) => {
+            event.stopPropagation();
+            onToggleAssignment?.(id);
+          }}
+          disabled={!currentUserId}
+        >
+          {isAssignedToCurrentUser ? "Remove me" : "Assign me"}
+        </button>
+      </div>
     </div>
   );
-}
+};
