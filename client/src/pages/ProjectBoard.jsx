@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Column } from "../components/Column/Column";
 import { useAuth } from "../contexts/AuthContext";
 import { useParams } from "react-router-dom";
-import { DndContext, closestCorners } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { Input } from "../components/Input/Input";
 import { DeleteTaskInput } from "../components/DeleteTaskInput/deleteTaskInput";
 import {
@@ -20,6 +19,15 @@ import {
   where,
   writeBatch
 } from "firebase/firestore";
+import {
+  DndContext,
+  closestCorners,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  DragOverlay
+} from "@dnd-kit/core";
 import { db } from "../config/firebase";
 
 const KANBAN_COLUMNS = [
@@ -47,6 +55,33 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
   const [members, setMembers] = useState([]);
   const [membersLoading, setMembersLoading] = useState(true);
   const [boardLoading, setBoardLoading] = useState(true);
+  const [activeTask, setActiveTask] = useState(null); // Add state for the active (dragged) task
+
+  //Configure sensors with an activation constraint (prevents accidental drags)
+    const sensors = useSensors(
+      useSensor(PointerSensor, {
+        activationConstraint: {
+          distance: 5, // must drag 5px before it activates
+        },
+      }),
+      useSensor(KeyboardSensor, {
+        coordinateGetter: sortableKeyboardCoordinates,
+      })
+    );
+
+  //Add a handleDragStart handler
+    const handleDragStart = (event) => {
+      const { active } = event;
+      const activeId = String(active.id);
+
+      for (const column of KANBAN_COLUMNS) {
+        const task = tasksByColumn[column.id].find((t) => t.id === activeId);
+        if (task) {
+          setActiveTask(task);
+          break;
+        }
+      }
+    };
 
   useEffect(() => {
     if (!projectId) {
@@ -235,45 +270,34 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
 
   const isColumnId = (id) => KANBAN_COLUMNS.some((column) => column.id === id);
 
-  const toggleCurrentUserAssignment = (taskId) => {
-    if (!user?.uid) {
-      return;
+  const toggleMemberAssignment = (taskId, memberId) => {
+  setTasksByColumn((prev) => {
+    const nextState = { ...prev };
+
+    for (const column of KANBAN_COLUMNS) {
+      const columnId = column.id;
+      const taskIndex = nextState[columnId].findIndex((task) => task.id === taskId);
+
+      if (taskIndex === -1) continue;
+
+      const task = nextState[columnId][taskIndex];
+      const assignedUserIds = Array.isArray(task.assignedUserIds) ? task.assignedUserIds : [];
+
+      const updatedAssignedUserIds = assignedUserIds.includes(memberId)
+        ? assignedUserIds.filter((id) => id !== memberId)
+        : [...assignedUserIds, memberId];
+
+      nextState[columnId] = [...nextState[columnId]];
+      nextState[columnId][taskIndex] = { ...task, assignedUserIds: updatedAssignedUserIds };
+      break;
     }
 
-    setTasksByColumn((prev) => {
-      const nextState = { ...prev };
-
-      for (const column of KANBAN_COLUMNS) {
-        const columnId = column.id;
-        const taskIndex = nextState[columnId].findIndex((task) => task.id === taskId);
-
-        if (taskIndex === -1) {
-          continue;
-        }
-
-        const task = nextState[columnId][taskIndex];
-        const assignedUserIds = Array.isArray(task.assignedUserIds)
-          ? task.assignedUserIds
-          : [];
-        const isAssigned = assignedUserIds.includes(user.uid);
-
-        const updatedTask = {
-          ...task,
-          assignedUserIds: isAssigned
-            ? assignedUserIds.filter((assignedUserId) => assignedUserId !== user.uid)
-            : [...assignedUserIds, user.uid]
-        };
-
-        nextState[columnId] = [...nextState[columnId]];
-        nextState[columnId][taskIndex] = updatedTask;
-        break;
-      }
-
-      return nextState;
-    });
-  };
+    return nextState;
+  });
+};
 
   const handleDragEnd = (event) => {
+    setActiveTask(null);
     const { active, over } = event;
 
     if (!over) return;
@@ -463,7 +487,7 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
   };
 
   return (
-    <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
       <div style={{ marginBottom: "16px" }}>
         <div
           style={{
@@ -559,18 +583,40 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
       {boardLoading ? <p>Loading board...</p> : null}
 
       <div style={{ display: "flex", gap: "16px", textAlign: "center" }}>
-        {KANBAN_COLUMNS.map((column) => (
+      {KANBAN_COLUMNS.map((column) => (
+        <SortableContext
+          key={column.id}
+          items={tasksByColumn[column.id].map((t) => t.id)}  // ← wrap each column
+          strategy={verticalListSortingStrategy}
+        >
           <Column
-            key={column.id}
             columnId={column.id}
             title={column.name}
             tasks={tasksByColumn[column.id]}
             members={members}
             currentUserId={user?.uid}
-            onToggleAssignment={toggleCurrentUserAssignment}
+            onToggleAssignment={toggleMemberAssignment}
           />
-        ))}
-      </div>
+        </SortableContext>
+      ))}
+    </div>
+      {/* Ghost card that follows the cursor while dragging */}
+      <DragOverlay>
+        {activeTask ? (
+          <div style={{
+            padding: "10px 14px",
+            background: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.18)",
+            opacity: 0.95,
+            cursor: "grabbing",
+            fontWeight: 500,
+            border: "2px solid #1d4ed8",
+          }}>
+            {activeTask.title}
+          </div>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 }
