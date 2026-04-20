@@ -284,8 +284,8 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
       const assignedUserIds = Array.isArray(task.assignedUserIds) ? task.assignedUserIds : [];
 
       const updatedAssignedUserIds = assignedUserIds.includes(memberId)
-        ? assignedUserIds.filter((id) => id !== memberId)
-        : [...assignedUserIds, memberId];
+        ? []
+        : [memberId];
 
       nextState[columnId] = [...nextState[columnId]];
       nextState[columnId][taskIndex] = { ...task, assignedUserIds: updatedAssignedUserIds };

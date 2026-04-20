@@ -70,6 +70,7 @@ export const Task = ({
         </div>
 
         {/* Dropdown to assign a member */}
+        {normalizedAssignedUserIds.length === 0 && ( 
         <select
           value={selectedMember}
           onPointerDown={(e) => e.stopPropagation()}
@@ -103,6 +104,7 @@ export const Task = ({
             );
           })}
         </select>
+        )}
       </div>
     </div>
   );
