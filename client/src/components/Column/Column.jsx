@@ -11,7 +11,8 @@ export const Column = ({
   tasks = [],
   members = [],
   currentUserId,
-  onToggleAssignment
+  onToggleAssignment,
+  onDelete
 }) => {
   const { setNodeRef } = useDroppable({ id: columnId });
   const taskCount = tasks.length;
@@ -44,6 +45,7 @@ export const Column = ({
             members={members}
             currentUserId={currentUserId}
             onToggleAssignment={onToggleAssignment}
+            onDelete={onDelete}
           />
         ))}
       </SortableContext>
