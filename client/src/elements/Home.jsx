@@ -79,23 +79,22 @@ function Home() {
       </div>
       <h6>Project Directory</h6>
       {loadingProjects ? (
-        <p>Loading projects...</p>
+        <div className="projects-container">
+          <p className="projects-empty">Loading projects...</p>
+        </div>
       ) : projects.length === 0 ? (
-        <p>No projects yet. Create one to get started.</p>
+        <div className="projects-container">
+          <p className="projects-empty">No projects yet. Create one to get started.</p>
+        </div>
       ) : (
-        <div style={{ border: "1px solid #444", borderRadius: "5px", padding: "10px", width: "320px", height: "200px" }}>
-        <ul style={{paddingLeft: "20px"}}>
-          {projects.map((project) => (
-            <li
-              key={project.id}
-              style={{
-
-              }}  
-            >
-              {project.name}
-            </li>
-          ))}
-        </ul>
+        <div className="projects-container">
+          <ul className="projects-list">
+            {projects.map((project) => (
+              <li key={project.id}>
+                {project.name}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
