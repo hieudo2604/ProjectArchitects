@@ -9,8 +9,10 @@ export const Task = ({
   assignedUserIds = [],
   members = [],
   currentUserId,
-  onToggleAssignment
+  onToggleAssignment,
+  onDelete
 }) => {
+  console.log("Task rendered, onDelete:", onDelete);
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
   const [selectedMember, setSelectedMember] = useState("");
   const isProcessing = useRef(false);
@@ -31,56 +33,78 @@ export const Task = ({
   });
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="task">
-      <input type="checkbox" className="checkbox" />
-      <div className="task-content">
-        <div className="task-meta">Task ID: {id}</div>
-        <div className="task-title">{title}</div>
+  <div ref={setNodeRef} style={{ ...style, position: "relative" }} {...attributes} className="task">
+    
+    {/* Drag handle — only this triggers drag */}
+    <div
+      {...listeners}
+      style={{ cursor: "grab", color: "#aaa", fontSize: "16px", marginBottom: "4px", userSelect: "none" }}
+    >
+      ⠿
+    </div>
 
-        {/* Assigned member pills */}
-        <div className="task-assignees">
-          {assignedMembers.length > 0 ? (
-            assignedMembers.map((assignedMember) => (
-              <span key={assignedMember.id} className="assignee-pill">
-                {assignedMember.label}
-                {/* Click × to unassign */}
-                <button
-                  type="button"
-                  onPointerDown={(e) => e.stopPropagation()}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onToggleAssignment?.(id, assignedMember.id);
-                  }}
-                  style={{
-                    marginLeft: "4px",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    fontWeight: "bold",
-                    color: "#888"
-                  }}
-                >
-                  ×
-                </button>
-              </span>
-            ))
-          ) : (
-            <span className="task-unassigned">No assignees</span>
-          )}
-        </div>
+    <div className="task-content">
+      {/*<div className="task-meta">Task ID: {id}</div>*/}
+      <div className="task-title">{title}</div>
 
-        {/* Dropdown to assign a member */}
+      {/* Delete button */}
+      <button
+        type="button"
+        onClick={() => onDelete?.(id)}
+        style={{
+          position: "absolute",
+          top: "8px",
+          right: "8px",
+          padding: "2px 8px",
+          border: "1px solid #fca5a5",
+          borderRadius: "4px",
+          background: "#fee2e2",
+          cursor: "pointer",
+          fontSize: "12px",
+          color: "#dc2626"
+        }}
+      >
+        ×
+      </button>
+
+      {/* Assigned member pills */}
+      <div className="task-assignees">
+        {assignedMembers.length > 0 ? (
+          assignedMembers.map((assignedMember) => (
+            <span key={assignedMember.id} className="assignee-pill">
+              {assignedMember.label}
+              <button
+                type="button"
+                onClick={() => onToggleAssignment?.(id, assignedMember.id)}
+                style={{
+                  marginLeft: "4px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  color: "#888"
+                }}
+              >
+                ×
+              </button>
+            </span>
+          ))
+        ) : (
+          <span className="task-unassigned">No assignees</span>
+        )}
+      </div>
+
+      {/* Dropdown to assign a member */}
+      {normalizedAssignedUserIds.length === 0 && (
         <select
           value={selectedMember}
-          onPointerDown={(e) => e.stopPropagation()}
           onChange={(e) => {
-            e.stopPropagation();
             const memberId = e.target.value;
-            if (memberId && !isProcessing.current) {  // ← guard here
+            if (memberId && !isProcessing.current) {
               isProcessing.current = true;
               onToggleAssignment?.(id, memberId);
               setSelectedMember("");
-              setTimeout(() => { isProcessing.current = false; }, 100);  // ← reset after
+              setTimeout(() => { isProcessing.current = false; }, 100);
             }
           }}
           style={{
@@ -94,16 +118,14 @@ export const Task = ({
           }}
         >
           <option value="">Assign member...</option>
-          {members.map((member) => {
-            const isAssigned = normalizedAssignedUserIds.includes(member.id);
-            return (
-              <option key={member.id} value={member.id} disabled={isAssigned}>
-                {isAssigned ? "✓ " : ""}{member.username || member.email}
-              </option>
-            );
-          })}
+          {members.map((member) => (
+            <option key={member.id} value={member.id}>
+              {member.username || member.email}
+            </option>
+          ))}
         </select>
-      </div>
+      )}
     </div>
-  );
+  </div>
+);
 };

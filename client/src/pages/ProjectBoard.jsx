@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useParams } from "react-router-dom";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { Input } from "../components/Input/Input";
-import { DeleteTaskInput } from "../components/DeleteTaskInput/deleteTaskInput";
+//import { DeleteTaskInput } from "../components/DeleteTaskInput/deleteTaskInput";
 import {
   arrayUnion,
   collection,
@@ -284,8 +284,8 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
       const assignedUserIds = Array.isArray(task.assignedUserIds) ? task.assignedUserIds : [];
 
       const updatedAssignedUserIds = assignedUserIds.includes(memberId)
-        ? assignedUserIds.filter((id) => id !== memberId)
-        : [...assignedUserIds, memberId];
+        ? []
+        : [memberId];
 
       nextState[columnId] = [...nextState[columnId]];
       nextState[columnId][taskIndex] = { ...task, assignedUserIds: updatedAssignedUserIds };
@@ -497,20 +497,23 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
             alignItems: "flex-start"
           }}
         >
-          <div style={{ flex: "1 1 260px", minWidth: "260px" }}>
+          <div style={{ flex: "0 0 auto", minWidth: "260px" }}>
             <Input onSubmit={addTask} />
           </div>
+          {/*
           <div style={{ flex: "1 1 260px", minWidth: "260px" }}>
             <DeleteTaskInput onDelete={deleteTask} />
           </div>
+          */}
           <div
             style={{
-              flex: "1 1 280px",
+              flex: "0 0 auto",
               minWidth: "280px",
               display: "flex",
               gap: "8px",
               alignItems: "center",
-              marginBottom: "16px"
+              marginBottom: "16px",
+              marginLeft: "auto"
             }}
           >
             <input
@@ -596,6 +599,7 @@ export default function KanbanBoard({ projectId: projectIdProp }) {
             members={members}
             currentUserId={user?.uid}
             onToggleAssignment={toggleMemberAssignment}
+            onDelete={deleteTask}
           />
         </SortableContext>
       ))}

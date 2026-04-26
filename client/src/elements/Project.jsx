@@ -102,8 +102,8 @@ function Project({ setActivePage }) {
         `Project "${newProjectName.trim()}" has been created successfully.`
       );
 
-      setNewProjectName();
-      setProjects((prev) => [...prev, { name: newProjectName.trim(), id: Date.now() }]);
+      setNewProjectName("");
+      //setProjects((prev) => [...prev, { name: newProjectName.trim(), id: Date.now() }]);
       //goToProjectBoard(newProjectName.trim());
     } catch (err) {
       console.error("Error creating project:", err);
@@ -161,6 +161,7 @@ function Project({ setActivePage }) {
               key={project.id}
               onClick={() => setActivePage("board", project.id)}
               style={{
+                position: "relative",
                 padding: "12px",
                 border: "1px solid #888",
                 borderRadius: "4px",
@@ -176,13 +177,16 @@ function Project({ setActivePage }) {
                   handleDelete(project.id, project.name);
                 }}
                 style={{
-                  background: "none",
-                  border: "none",
-                  color: "#888",
-                  fontSize: "16px",
+                  position: "absolute",
+                  top: "8px",
+                  right: "8px",
+                  padding: "2px 8px",
+                  border: "1px solid #fca5a5",
+                  borderRadius: "4px",
+                  background: "#fee2e2",
                   cursor: "pointer",
-                  padding: "0px, 0px, 0px, 32px",              
-                  lineHeight: 1,
+                  fontSize: "12px",
+                  color: "#dc2626"
                 }}
                 title="Delete project"
               >

@@ -26,13 +26,11 @@ export const Input = ({ onSubmit }) => {
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Enter a new task..."
                 />
-                <br></br>
                 <select value={column} onChange={(e) => setColumn(e.target.value)} className="select">
                     <option value="todo">To-Do</option>
                     <option value="in-progress">In-Progress</option>
                     <option value="done">Done</option>
                 </select>
-                <br></br>
                 <button type="submit" className="button">Add Task</button>
             </form>
         </div>

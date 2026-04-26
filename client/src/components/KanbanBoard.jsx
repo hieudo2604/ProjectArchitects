@@ -134,9 +134,13 @@ function KanbanBoard({ projectId }) {
 
           return (
             <Column
-              key={column.id}
-              column={column}
-              tasks={columnTasks}
+              columnId={column.id}
+              title={column.name}
+              tasks={tasksByColumn[column.id]}
+              members={members}
+              currentUserId={user?.uid}
+              onToggleAssignment={toggleMemberAssignment}
+              onDelete={deleteTask}
             />
           );
         })}
