@@ -6,7 +6,6 @@ import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Notification.css';
 
-
 function Notification() {
     const { user } = useAuth();
     const [notifications, setNotifications] = useState([]);
