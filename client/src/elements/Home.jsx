@@ -3,7 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { doc, getDoc, collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "../config/firebase";
 //import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+//import 'react-calendar/dist/Calendar.css';
 import "./Home.css";
 
 function getGreeting() {
