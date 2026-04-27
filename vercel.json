@@ -1,3 +1,12 @@
-git add vercel.json
-git commit -m "Add vercel.json for deployment config"
-git push
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ]
+}
