@@ -1,19 +1,22 @@
 /* Main content default (light mode) */
 .content.light {
-  background-color: #ffffff;
-  color: #000000;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  color: #1a1a1a;
 }
 
 /* Dark mode */
 .content.dark {
-  background-color: #121212;
-  color: #ffffff;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+  color: #e8e8e8;
 }
 
 .content {
-  padding: 2rem;
+  padding: 2.5rem;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 }
 
 .content.collapsed {
@@ -24,10 +27,107 @@
   margin-left: 225px;
 }
 
+/* Headings - Professional typography */
 [data-theme="dark"] h1,
 [data-theme="dark"] h2,
 [data-theme="dark"] h3,
 [data-theme="dark"] p 
 {
-  color: #ffffff;
+  color: #e8e8e8;
+}
+
+.content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
+.content h2 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: -0.25px;
+  margin-bottom: 0.875rem;
+}
+
+.content h3 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.125px;
+  margin-bottom: 0.75rem;
+}
+
+.content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  letter-spacing: 0.3px;
+  margin: 0.5rem 0;
+}
+
+/* Light mode text colors */
+.content.light h1,
+.content.light h2,
+.content.light h3,
+.content.light p {
+  color: #1a1a1a;
+}
+
+/* Card/Container styles for content sections */
+.content-card {
+  background: inherit;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.content.dark .content-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.content-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.content.dark .content-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Smooth scrolling */
+.content {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content.light ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.content.light ::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.content.light ::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+.content.dark ::-webkit-scrollbar-track {
+  background: #2a2a2a;
+}
+
+.content.dark ::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+.content.dark ::-webkit-scrollbar-thumb:hover {
+  background: #777;
 }

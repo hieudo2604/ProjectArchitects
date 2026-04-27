@@ -98,9 +98,13 @@ function Home() {
       </div>
       */}
       {loadingProjects ? (
-        <p>Loading projects...</p>
+        <div className="projects-container">
+          <p className="projects-empty">Loading projects...</p>
+        </div>
       ) : projects.length === 0 ? (
-        <p>No projects yet. Create one to get started.</p>
+        <div className="projects-container">
+          <p className="projects-empty">No projects yet. Create one to get started.</p>
+        </div>
       ) : (
         <div style={{ border: "1px solid #444", borderRadius: "5px", padding: "10px", width: "320px", height: "auto" }}>
           <h6 style={{ marginTop: 0 }}>Projects</h6>
