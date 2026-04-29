@@ -74,7 +74,7 @@ function LoginModal({ onClose, onLogin, onForgotPassword }) {
       <div className="modal-backdrop">
         <div className="modal">
           <button className="back-btn" onClick={goToLogin}>← Back</button>
-          <h2>Reset Password</h2>
+          <h2 className="w3-text-black">Reset Password</h2>
           <p className="modal-subtitle">
             Enter your email and we'll send you a reset link.
           </p>
@@ -123,7 +123,7 @@ function LoginModal({ onClose, onLogin, onForgotPassword }) {
   return (
     <div className="modal-backdrop">
       <div className="modal">
-        <h2>Log In</h2>
+        <h2 className="w3-text-black">Log In</h2>
 
         <form onSubmit={handleSubmit}>
           <input
