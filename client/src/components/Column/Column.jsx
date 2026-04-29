@@ -26,7 +26,7 @@ export const Column = ({
   return (
     <div ref={setNodeRef} className="column">
       <div className="column-header">
-        <h2 className="column-title">{title}</h2>
+        <h3 className="column-title">{title}</h3>
         <div className="column-meta">
           <span className={`status-badge ${statusClass}`}>{title}</span>
           <span className="task-count">{taskCount}</span>
