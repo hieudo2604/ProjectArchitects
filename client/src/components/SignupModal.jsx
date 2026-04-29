@@ -74,7 +74,7 @@ function SignupModal({ onClose, onSignup }) {
   return (
     <div className="modal-backdrop">
       <div className="modal">
-        <h2>Sign Up</h2>
+        <h2 className="w3-text-black">Sign Up</h2>
         {error && <p className="modal-error">{error}</p>} 
         <form onSubmit={handleSubmit}>
           <input
